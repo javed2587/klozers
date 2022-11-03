@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+	<Properties>
+		<!-- <Property name="log-path">/home/tchapi/tomcat-9.0.30/logs/</Property> -->
+		<!-- <Property name="log-path">${bundle:application-dev:log-path}</Property> -->
+		<Property name="log-path">${bundle:application:log-path}</Property>
+	</Properties>
+
+	<Appenders>
+		<!-- Console Appender -->
+		<Console name="Console" target="SYSTEM_OUT">
+			<PatternLayout
+				pattern="%d{yyyy-MMM-dd HH:mm:ss a} [%t] %-5level %logger{36} %L - %msg%n" />
+				<Policies>
+				<TimeBasedTriggeringPolicy interval="1" modulate="true" />
+				<SizeBasedTriggeringPolicy size="250 MB" />
+				</Policies>
+		</Console>
+
+		<!-- Rolling File Appender -->
+		<RollingFile name="File" fileName="${log-path}/Klozerz.log" filePattern="${log-path}/Klozerz-%d{yyyy-MM-dd}.log">
+			<PatternLayout>
+				<pattern>%d{yyyy-MMM-dd HH:mm:ss a} [%t] %-5level %logger{36} %L -%msg%n</pattern>
+			</PatternLayout>
+			<Policies>
+			<TimeBasedTriggeringPolicy interval="1" modulate="true" />
+			<SizeBasedTriggeringPolicy size="250 MB" />
+			</Policies>
+		</RollingFile>
+
+		<RollingFile name="DbFile" fileName="${log-path}/Klozerz_DB.log" filePattern="${log-path}/Klozerz_DB-%d{yyyy-MM-dd}.log">
+			<PatternLayout>
+				<pattern>%d{yyyy-MMM-dd HH:mm:ss a} [%t] %-5level %logger{36} %L -%msg%n</pattern>
+			</PatternLayout>
+			<Policies>
+			<TimeBasedTriggeringPolicy interval="1" modulate="true" />
+			<SizeBasedTriggeringPolicy size="250 MB" />
+				
+			</Policies>
+		</RollingFile>
+
+	</Appenders>
+
+	<Loggers>
+		<!-- Log everything in hibernate -->
+		<Logger name="org.hibernate" level="info" additivity="false">
+			<AppenderRef ref="Console" />
+			<AppenderRef ref="DbFile" />
+		</Logger>
+		<!-- Log SQL statements -->
+		<Logger name="org.hibernate.SQL" level="debug" additivity="false">
+			<AppenderRef ref="Console" />
+			<AppenderRef ref="DbFile" />
+		</Logger>
+		<!-- Log JDBC bind parameters -->
+		<Logger name="org.hibernate.type.descriptor.sql" level="trace" additivity="false">
+			<!-- <AppenderRef ref="Console" /> -->
+			<AppenderRef ref="DbFile" />
+		</Logger>
+		
+		<Logger name="com.ssa.Klozerz" level="info" additivity="false">
+			<AppenderRef ref="Console" />
+			<AppenderRef ref="File" />
+		</Logger>
+
+
+		<Logger name="com.ssa.Klozerz" level="debug" additivity="false">
+			<AppenderRef ref="Console" />
+			<AppenderRef ref="File" />
+		</Logger>
+
+		<Root level="error">
+			<AppenderRef ref="Console" />
+			<AppenderRef ref="File" />
+		</Root>
+	</Loggers>
+
+</Configuration>
